@@ -145,10 +145,18 @@ function searchCertificate() {
     const email = document.getElementById("studEmail").value.trim();
     const name = document.getElementById("studName").value.trim();
 
+    if (!email || !name) {
+        alert("Please enter both name and email.");
+        return;
+    }
+
+    console.log("Sending request to backend with:", { email, name });
+
     axios.post("https://certificatedistribution-production.up.railway.app/generate-certificate", { email, name }, {
-        responseType: 'blob' // Important for binary ZIP file
+        responseType: 'blob'
     })
     .then(response => {
+        console.log("Response received:", response);
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement("a");
         link.href = url;
@@ -161,6 +169,7 @@ function searchCertificate() {
         console.error("Error:", error);
     });
 }
+
 
 
     </script>
