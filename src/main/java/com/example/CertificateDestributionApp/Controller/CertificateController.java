@@ -23,12 +23,13 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 @RestController
+    @CrossOrigin(origins = "*") // <-- important if calling from browser
 public class CertificateController {
 
     @Autowired
     private CertificateDataRepo participantRepository;
 
-    @PostMapping("/generate-certificate/")
+    @PostMapping("/generate-certificate")
     public ResponseEntity<?> generateCertificates(@RequestBody Map<String, String> request) {
         try {
             String email = request.getOrDefault("email", "").trim();
