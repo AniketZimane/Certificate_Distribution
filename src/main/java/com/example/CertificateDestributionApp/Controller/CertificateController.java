@@ -22,8 +22,8 @@ import java.util.Optional;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+@CrossOrigin(origins = "*") // <-- important if calling from browser
 @RestController
-    @CrossOrigin(origins = "*") // <-- important if calling from browser
 public class CertificateController {
 
     @Autowired
