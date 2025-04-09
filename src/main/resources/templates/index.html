@@ -1,0 +1,168 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DYPCOEI Certificate Generator | TecnoCarts 2K25</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="floating-bg"></div>
+<div class="particles" id="particles"></div>
+
+<div class="logo-header">
+    <img src="/images/DYPCOEILOGO1.jpg" alt="DYPCOEI Logo">
+    <div class="college-name">
+        <h1>Dr. D. Y. Patil College of Engineering & Innovation</h1>
+    </div>
+    <div class="event-name">TecnoCarts 2K25</div>
+    <div class="powered-by">Powered by <a href="https://insightvisioners.github.io/"><span>InsightVisioners</span></a></div>
+</div>
+
+<div class="tab-container">
+    <button class="tab active" onclick="openTab('emailTab')">
+        <i class="fas fa-envelope"></i> Search by Email
+    </button>
+    <button class="tab" onclick="openTab('mobileTab')">
+        <i class="fas fa-user-alt"></i> Search by Name
+    </button>
+</div>
+
+<div id="emailTab" class="tab-content active">
+    <div class="form-container">
+        <div class="form-group">
+            <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
+            <input type="email" id="studEmail" placeholder="Enter your registered email" required>
+        </div>
+        <button class="search-btn" onclick="searchCertificate()">
+            Search Certificate <i class="fas fa-search"></i>
+        </button>
+    </div>
+</div>
+
+<div id="mobileTab" class="tab-content">
+    <div class="form-container">
+        <div class="form-group">
+            <label for="mobile"><i class="fas fa-user-alt"></i>Name(Used while registration)</label>
+            <input type="text" id="studName" placeholder="Enter the Register Name Here" required>
+        </div>
+        <button class="search-btn" onclick="searchCertificate()">
+            Search Certificate <i class="fas fa-search"></i>
+        </button>
+    </div>
+</div>
+
+<div class="loading" id="loadingIndicator">
+    <div class="loading-spinner"></div>
+    <p id="msg">Searching for your certificate...</p>
+</div>
+<div id="certificate-preview" class="certificate-preview-container">
+    <div class="certificate-image-container">
+        <img id="certificateImage" alt="Generated Certificate">
+    </div>
+    <div class="action-buttons">
+        <button class="action-btn download-btn" onclick="downloadCertificate()">
+            <i class="fas fa-download"></i> Download Certificate
+        </button>
+    </div>
+</div>
+
+
+<div class="footer">
+    <p>Certificate Verification System</p>
+    <div class="insight-footer">
+<!--        <img src="https://via.placeholder.com/30x30/6C63FF/FFFFFF?text=IV" alt="InsightVisioners" class="insight-logo">-->
+        <a href="https://insightvisioners.github.io/"><span class="insight-text">InsightVisioners</span></a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script>
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+
+                // Random properties
+                const size = Math.random() * 10 + 5;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const delay = Math.random() * 15;
+                const duration = Math.random() * 10 + 10;
+                const color = `hsl(${Math.random() * 60 + 200}, 70%, 60%)`;
+
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.background = color;
+
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Tab functionality
+        function openTab(tabName) {
+            const tabs = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+
+            const tabButtons = document.getElementsByClassName('tab');
+            for (let i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove('active');
+            }
+
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+
+            // Add ripple effect
+            const ripple = document.createElement('span');
+            ripple.classList.add('ripple');
+            event.currentTarget.appendChild(ripple);
+
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        }
+
+
+let currentCertificateUrl = null;
+
+function searchCertificate() {
+    const email = document.getElementById("studEmail").value.trim();
+    const name = document.getElementById("studName").value.trim();
+
+    axios.post("http://localhost:8080/generate-certificate", { email, name }, {
+        responseType: 'blob' // Important for binary ZIP file
+    })
+    .then(response => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "certificates.zip");
+        document.body.appendChild(link);
+        link.click();
+    })
+    .catch(error => {
+        alert("No certificates found or error occurred!");
+        console.error("Error:", error);
+    });
+}
+
+
+    </script>
+</body>
+</html>
