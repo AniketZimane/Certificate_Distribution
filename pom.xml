@@ -11,7 +11,7 @@
 	<groupId>com.example</groupId>
 	<artifactId>CertificateDestributionApp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>CertificateDestributionApp</name>
 	<description>Certificate Distribution app</description>
 	<url/>
