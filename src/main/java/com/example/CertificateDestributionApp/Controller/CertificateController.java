@@ -28,7 +28,7 @@ public class CertificateController {
     @Autowired
     private CertificateDataRepo participantRepository;
 
-    @PostMapping("/generate-certificate")
+    @PostMapping("/generate-certificate/")
     public ResponseEntity<?> generateCertificates(@RequestBody Map<String, String> request) {
         try {
             String email = request.getOrDefault("email", "").trim();
