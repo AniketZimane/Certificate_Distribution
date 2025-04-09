@@ -145,7 +145,7 @@ function searchCertificate() {
     const email = document.getElementById("studEmail").value.trim();
     const name = document.getElementById("studName").value.trim();
 
-    axios.post("https://certificatedistribution-production.up.railway.app/generate-certificate/", { email, name }, {
+    axios.post("https://certificatedistribution-production.up.railway.app/generate-certificate", { email, name }, {
         responseType: 'blob' // Important for binary ZIP file
     })
     .then(response => {
