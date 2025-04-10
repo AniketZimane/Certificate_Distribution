@@ -55,14 +55,15 @@ public class CertificateController {
             for (CertificateData participant : participants) {
                 String eventType = participant.getType();
                 String templatePath;
-                String filename;
+                String filename = participant.getName().replaceAll("[^a-zA-Z0-9 ]", "").replaceAll(" ", "_");
+                String safeEventType = eventType.replaceAll("[^a-zA-Z0-9 ]", "").replaceAll(" ", "_");
 
                 if ("Techathon(Project Competition)".equalsIgnoreCase(eventType)) {
                     templatePath = "static/images/Techathon_Certificate.jpg";
-                    filename = "techathon_" + participant.getName() + ".jpg";
+                    filename = "techathon_" + participant.getName()+ "_" + safeEventType  + ".jpg";
                 } else {
                     templatePath = "static/images/CodeFiesta_Certificate.jpg";
-                    filename = "codefiesta_" + participant.getName() + ".jpg";
+                    filename = "codefiesta_" + participant.getName()+ "_" + safeEventType   + ".jpg";
                 }
 
                 try (InputStream templateStream = getClass().getClassLoader().getResourceAsStream(templatePath)) {
