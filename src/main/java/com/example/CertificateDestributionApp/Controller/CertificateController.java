@@ -87,6 +87,7 @@ public class CertificateController {
                         g.drawString(participant.getName().toUpperCase(), 590, 490);
                     } else if ("volunteer".equalsIgnoreCase(eventType)){
                          g.drawString(participant.getName().toUpperCase(), 590, 252);
+                    }
                     else {
                         g.drawString(participant.getName().toUpperCase(), 590, 448);
                         g.drawString(eventType, 650, 490);
