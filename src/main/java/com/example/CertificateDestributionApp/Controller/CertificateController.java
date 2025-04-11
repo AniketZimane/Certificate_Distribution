@@ -62,12 +62,12 @@ public class CertificateController {
                     templatePath = "static/images/Techathon_Certificate.jpg";
                     filename = "techathon_" + participant.getName()+ "_" + safeEventType  + ".jpg";
                 }
-                if ("volunteer".equalsIgnoreCase(eventType)) {
+                else if ("volunteer".equalsIgnoreCase(eventType)) {
                     templatePath = "static/images/VolentiersList.jpg";
                     filename = "techocrats" + participant.getName()+ "_" + safeEventType  + ".jpg";
                 
                 }
-                } else {
+                 else {
                     templatePath = "static/images/CodeFiesta_Certificate.jpg";
                     filename = "codefiesta_" + participant.getName()+ "_" + safeEventType   + ".jpg";
                 }
